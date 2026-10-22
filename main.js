@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execFile } = require('child_process');
@@ -6,13 +7,56 @@ const { execFile } = require('child_process');
 // Disable hardware acceleration to prevent transparent window GPU crash on Windows
 app.disableHardwareAcceleration();
 
+const DEFAULT_SETTINGS = {
+  pingTarget: '4.2.2.4',
+  pingIntervalMs: 1000,
+  pingTimeoutMs: 800,
+  isPinned: false
+};
+
+function getConfigPath() {
+  return path.join(app.getPath('userData'), 'gemini-vpn-config.json');
+}
+
+function sanitizeTarget(target) {
+  if (typeof target !== 'string') return null;
+  const trimmed = target.trim();
+  if (!trimmed || trimmed.length > 255) return null;
+  if (/^[a-zA-Z0-9.-]+$/.test(trimmed)) {
+    return trimmed;
+  }
+  return null;
+}
+
+function loadSettings() {
+  try {
+    const configPath = getConfigPath();
+    if (fs.existsSync(configPath)) {
+      const raw = fs.readFileSync(configPath, 'utf8');
+      const parsed = JSON.parse(raw);
+      const pingTarget = sanitizeTarget(parsed.pingTarget) || DEFAULT_SETTINGS.pingTarget;
+      const pingIntervalMs = (typeof parsed.pingIntervalMs === 'number')
+        ? Math.max(500, Math.min(5000, Math.round(parsed.pingIntervalMs)))
+        : DEFAULT_SETTINGS.pingIntervalMs;
+      const pingTimeoutMs = (typeof parsed.pingTimeoutMs === 'number')
+        ? Math.max(300, Math.min(3000, Math.round(parsed.pingTimeoutMs)))
+        : DEFAULT_SETTINGS.pingTimeoutMs;
+      const isPinned = Boolean(parsed.isPinned);
+      return { pingTarget, pingIntervalMs, pingTimeoutMs, isPinned };
+    }
+  } catch (err) {
+    console.error('Failed to load settings from disk, using defaults:', err);
+  }
+  return { ...DEFAULT_SETTINGS };
+}
+
+let currentSettings = loadSettings();
 let mainWindow;
-const PING_TARGET = '4.2.2.4';
 const MAX_HISTORY = 18;
 
 let history = [];
 let cycleCount = 0;
-let isPinned = false;
+let isPinned = currentSettings.isPinned;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -43,6 +87,53 @@ function createWindow() {
   });
 }
 
+function saveSettings(newSettings) {
+  try {
+    const sanitized = { ...currentSettings };
+    let targetChanged = false;
+
+    if (newSettings && typeof newSettings.pingTarget === 'string') {
+      const valid = sanitizeTarget(newSettings.pingTarget);
+      if (!valid) {
+        return { success: false, error: 'Invalid host or IP address format', settings: currentSettings };
+      }
+      if (valid !== currentSettings.pingTarget) {
+        sanitized.pingTarget = valid;
+        targetChanged = true;
+      }
+    }
+
+    if (newSettings && typeof newSettings.pingIntervalMs === 'number') {
+      sanitized.pingIntervalMs = Math.max(500, Math.min(5000, Math.round(newSettings.pingIntervalMs)));
+    }
+
+    if (newSettings && typeof newSettings.pingTimeoutMs === 'number') {
+      sanitized.pingTimeoutMs = Math.max(300, Math.min(3000, Math.round(newSettings.pingTimeoutMs)));
+    }
+
+    if (newSettings && typeof newSettings.isPinned === 'boolean') {
+      sanitized.isPinned = newSettings.isPinned;
+      isPinned = sanitized.isPinned;
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setAlwaysOnTop(isPinned);
+      }
+    }
+
+    const configPath = getConfigPath();
+    fs.writeFileSync(configPath, JSON.stringify(sanitized, null, 2), 'utf8');
+    currentSettings = sanitized;
+
+    if (targetChanged) {
+      history = [];
+    }
+
+    return { success: true, settings: currentSettings };
+  } catch (err) {
+    console.error('Failed to save settings to disk:', err);
+    return { success: false, error: err.message, settings: currentSettings };
+  }
+}
+
 // IPC Handlers
 ipcMain.on('window:close', () => {
   app.quit();
@@ -56,7 +147,16 @@ ipcMain.handle('window:toggle-pin', () => {
   if (!mainWindow) return false;
   isPinned = !isPinned;
   mainWindow.setAlwaysOnTop(isPinned);
+  saveSettings({ isPinned });
   return isPinned;
+});
+
+ipcMain.handle('settings:get', () => {
+  return currentSettings;
+});
+
+ipcMain.handle('settings:save', (_event, newSettings) => {
+  return saveSettings(newSettings);
 });
 
 // Ping 4.2.2.4
@@ -170,3 +270,14 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    DEFAULT_SETTINGS,
+    sanitizeTarget,
+    loadSettings,
+    saveSettings,
+    getConfigPath,
+    getCurrentSettings: () => currentSettings
+  };
+}
