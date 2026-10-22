@@ -1,8 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execFile } = require('child_process');
+
+if (Menu && typeof Menu.setApplicationMenu === 'function') {
+  Menu.setApplicationMenu(null);
+}
 
 const DEFAULT_SETTINGS = {
   pingTarget: '4.2.2.4',
@@ -65,8 +69,6 @@ function createWindow() {
     transparent: true,
     hasShadow: false,
     backgroundColor: '#00000000',
-    titleBarStyle: 'hidden',
-    autoHideMenuBar: true,
     title: '',
     resizable: false,
     maximizable: false,
@@ -78,6 +80,7 @@ function createWindow() {
   });
 
   mainWindow.removeMenu();
+  mainWindow.setMenuBarVisibility(false);
 
   const devUrl = process.env.VITE_DEV_SERVER_URL;
   if (devUrl) {

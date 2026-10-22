@@ -31,6 +31,9 @@ Module.prototype.require = function (request) {
       ipcMain: {
         on: () => {},
         handle: () => {}
+      },
+      Menu: {
+        setApplicationMenu: () => {}
       }
     };
   }

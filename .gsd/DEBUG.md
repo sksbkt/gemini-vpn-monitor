@@ -1,34 +1,33 @@
-# Debug Session: Graph Alignment & Tooltip Clipping
+# Debug Session: Rogue Window Handler & Flashing on Alt+Tab
 
 ## Symptom
-1. The oscilloscope graph window was not horizontally centered inside the widget card (it overflowed to the right with 20px left padding vs 4px right margin).
-2. The ping hover tooltip was clipped/cut off on higher parts of the graph (when ping latency points were in the upper region of the graph).
+A native window handler (titlebar/menu bar tab) appeared at the top of the window and flashed intermittently whenever `Alt+Tab` was pressed or during window switching.
 
-**When:** Hovering over high ping values, and viewing the widget card layout.
-**Expected:**
-- The graph window must be horizontally centered with exact 20px margins on both sides, matching the header and metrics grid.
-- The tooltip must always be completely visible without clipping, even for high ping spikes or edge coordinates.
-**Actual:**
-- Graph was 316px wide inside a 300px inner card space, overflowing 16px to the right and appearing misaligned (20px left padding vs 4px right margin).
-- The graph container had `overflow: hidden`, and tooltip positioning used a rigid `translate(-50%, -125%)` when `normY >= 32`, placing the top of the tooltip outside the container bounds where it got sliced off.
+**When:** Pressing `Alt+Tab` or switching application focus on Windows.
+**Expected:** The widget must remain a pure frameless, transparent floating HUD with no native window handler, titlebar, or menu bar flashing or appearing during focus switches or `Alt+Tab`.
+**Actual:** Pressing `Alt+Tab` caused a native window handler/menu bar strip to pop open at the top of the transparent card and flash/disappear when `Alt` was released or focus changed.
 
 ## Resolution
 
 **Root Cause:**
-1. The oscilloscope canvas container was assigned a hardcoded width of `316px` in `App.tsx` and `PingOscilloscope.tsx`, while the widget card's inner content width is `300px` (340px card - 40px horizontal padding). Because flex items align to start by default without auto margins, this pushed the graph 16px rightward, creating an asymmetric 20px left vs 4px right gap.
-2. The oscilloscope container had `overflow: hidden`, which sliced off the floating tooltip whenever points were in the upper half of the canvas (`normY` between 32px and 48px).
+1. `autoHideMenuBar: true` in `BrowserWindow` options actively registers a Windows shortcut hook on the `Alt` key. In Electron, `autoHideMenuBar` specifically instructs the window manager to unhide/render the application menu bar whenever the `Alt` key is pressed. Because `Alt+Tab` always begins with pressing the `Alt` key, Electron was immediately mounting and painting the menu bar/handler, then unmounting it when `Alt` was released, causing an intrusive flashing window handler.
+2. `titleBarStyle: 'hidden'` on Windows specifically activates Chromium's "Window Controls Overlay" (WCO). On frameless transparent windows, this overlay creates an extraneous native window caption/controls hook.
+3. `Menu.setApplicationMenu(null)` was not invoked globally, leaving Chromium's default application menu (File, Edit, View, Window, Help) active in memory.
 
 **Fix:**
-1. Changed `PingOscilloscope` width from `316px` to `300px` in `src/App.tsx` and updated the default prop in `src/components/PingOscilloscope.tsx`.
-2. Centered the graph container with `margin: '0 auto 12px auto'`, `max-width: 300px`, and `align-self: center`.
-3. Set `overflow: visible` on `.wave-container` in `styles.css` and `PingOscilloscope.tsx`, giving it `z-index: 10` so the tooltip can float freely without being cut off.
-4. Added `borderRadius: '12px'` to the `<canvas>` element so the background wave still retains smooth rounded corners.
-5. Improved dynamic tooltip placement: when a hover point is in the upper half (`normY < 44`), the tooltip flips below the point with 14px padding; when in the lower half, it floats above with safe boundary clamping.
-6. Rebuilt production bundle (`npm run build`).
+1. Removed `autoHideMenuBar: true` and `titleBarStyle: 'hidden'` from `BrowserWindow` configuration in [main.js](file:///e:/Electron/gemini-vpn-monitor/main.js).
+2. Called `Menu.setApplicationMenu(null)` globally before window creation, completely removing default application menus and accelerators from Electron.
+3. Called `mainWindow.setMenuBarVisibility(false)` on window creation to guarantee menu bars are permanently suppressed.
+4. Added `outline: none;` to universal `*` selector in [styles.css](file:///e:/Electron/gemini-vpn-monitor/styles.css) to eliminate any focus outline artifacts.
+5. Updated unit test mocks in `test/test-settings-poller.js`, `test/test-e2e-persistence.js`, and `test/test-ipc-contract.js` to mock `Menu.setApplicationMenu`.
+6. Rebuilt production assets with `npm run build`.
 
 **Verified:**
-- TypeScript type-check and Vite production build passed cleanly.
-- Unit and integration tests passed (`test-settings-poller.js`, `test-e2e-persistence.js`, `test-ipc-contract.js`).
+- `npm run build` completed with 0 errors.
+- All unit and integration test suites passed:
+  - `test-settings-poller.js` passed.
+  - `test-e2e-persistence.js` passed.
+  - `test-ipc-contract.js` passed.
 - Electron process launch smoke test passed (`ELECTRON_LAUNCH_SMOKE_TEST_PASS`).
 
 **Status:** FIXED

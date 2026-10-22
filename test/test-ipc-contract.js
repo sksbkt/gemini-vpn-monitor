@@ -34,6 +34,9 @@ Module.prototype.require = function (request) {
         handle: (channel, handler) => {
           ipcHandlers.set(channel, handler);
         }
+      },
+      Menu: {
+        setApplicationMenu: () => {}
       }
     };
   }
