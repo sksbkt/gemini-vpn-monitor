@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-22T19:12:15+03:30
+updated: 2026-10-22T19:17:10+03:30
 ---
 
 # Project State
@@ -7,35 +7,19 @@ updated: 2026-10-22T19:12:15+03:30
 ## Current Position
 
 **Milestone:** Modernize & Integrate React/uPlot
-**Phase:** 1 - Toolchain & Vite Build Setup (Verified)
-**Status:** ✅ Complete and verified
-**Plan:** Ready for Phase 2 planning
+**Phase:** 2 - React HUD Shell & Oscilloscope Integration
+**Status:** In Progress / Restored
+**Plan:** Full HUD integrated into App.tsx
 
 ## Last Session Summary
 
-Phase 1 verified with empirical proof:
-- 5/5 must-haves verified in [`.gsd/phases/1/VERIFICATION.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/phases/1/VERIFICATION.md).
-- Zero TypeScript diagnostics.
-- Vite build completes in ~800ms.
-- Output assets resolve relatively for Electron runtime.
+Debugged and resolved UI disappearance:
+- Root cause identified: Phase 1's temporary `App.tsx` skeleton lacked the component bindings and metrics grid.
+- Fixed: Integrated the full React HUD into [`src/App.tsx`](file:///e:/Electron/gemini-vpn-monitor/src/App.tsx) with [`PingOscilloscope.tsx`](file:///e:/Electron/gemini-vpn-monitor/src/components/PingOscilloscope.tsx), real-time `window.api.onUpdate` telemetry streaming, status pill variants, and the 2x2 metrics grid.
+- Verified: `npm run build` completed and Electron launched cleanly with full UI.
+- Resolution documented in [`.gsd/DEBUG.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/DEBUG.md) and committed (`fa688f7`).
 
 ## Next Steps
 
-1. Run `/plan 2` to create execution plans for Phase 2: React HUD Shell & Telemetry State.
-2. Run `/execute 2` to implement Phase 2.
-
-## Active Decisions
-
-| Decision | Choice | Made | Affects |
-|----------|--------|------|---------|
-| Primary Renderer Modernization | Vite + React + TypeScript + uPlot | 2026-10-22 | All phases |
-| Relative Asset Path | `base: './'` in `vite.config.ts` | 2026-10-22 | Build output |
-| Main Process Scope | Keep `main.js` and `preload.js` in JavaScript | 2026-10-22 | Phase 1, Phase 2 |
-
-## Blockers
-
-None.
-
-## Concerns
-
-None. Phase 1 completely verified.
+1. Launch application via `npm start` or `start.bat` to preview live widget.
+2. Complete Phase 3 polish and verification.
