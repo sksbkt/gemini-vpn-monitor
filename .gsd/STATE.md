@@ -1,35 +1,42 @@
 ---
-updated: 2026-10-22T19:45:25+03:30
+updated: 2026-10-22T19:55:10+03:30
 ---
 
 # Project State
 
 ## Current Position
 
-**Milestone:** Modernize & Integrate React/uPlot
-**Status:** 🎉 Milestone Complete (All 3 Phases Verified)
-**Plan:** All planned tasks executed and verified
+**Milestone:** Settings & Custom Target Configuration (v1.2.0)
+**Phase:** 1 - Settings Store & Dynamic Poller IPC
+**Status:** Milestone planned / Ready for Phase 1 planning
+**Plan:** None active (ready for /plan 1)
 
-## Last Session Summary
+## Last Action
 
-Phase 3 executed and verified successfully:
-- Obsolete legacy assets (`renderer.js` and `lib/`) cleanly removed.
-- [`.gsd/ARCHITECTURE.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/ARCHITECTURE.md) and [`.gsd/STACK.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/STACK.md) updated to reflect the Vite + React + TypeScript component tree and resolved technical debt.
-- Production build compiled in 809ms.
-- Verified in [`.gsd/phases/3/VERIFICATION.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/phases/3/VERIFICATION.md) (Verdict: `PASS`).
-
-## Milestone Summary
-
-- **Total Phases:** 3/3 completed (100%)
-- **Total Plans:** 6/6 executed and verified
-- **Core Deliverables:**
-  - Modern Vite + React 18 + TypeScript build toolchain with relative bundle linking (`base: './'`).
-  - Modularized component hierarchy: `Header`, `StatusPill`, `MetricsGrid`, `PingOscilloscope`.
-  - 60 FPS Canvas latency oscilloscope with dynamic ceiling and glowing neon red 0ms timeout plunges.
-  - Safe IPC unsubscribe lifecycle in `preload.js` and `App.tsx`.
-  - Cleaned up workspace free of legacy scripts or vendored libraries.
+Milestone v1.2 created:
+- `.gsd/SPEC.md` finalized with goals, constraints, shell sanitization, and technical requirements.
+- `.gsd/ROADMAP.md` initialized with 3 phases covering persistence, UI modal, and end-to-end verification.
 
 ## Next Steps
 
-1. Launch and use the widget anytime via `start.bat` or `npm start`.
-2. Ready for future feature milestones (e.g. settings UI, multi-endpoint monitoring).
+1. Run `/plan 1` to create execution plans for Phase 1: Settings Store & Dynamic Poller IPC.
+
+## Active Decisions
+
+| Decision | Choice | Made | Affects |
+|----------|--------|------|---------|
+| Storage Strategy | JSON config in `app.getPath('userData')/config.json` | 2026-10-22 | Phase 1 |
+| Shell Injection Protection | Strict regex sanitization `^[a-zA-Z0-9.-]+$` before `execFile` | 2026-10-22 | Phase 1 |
+| Poller Reconfiguration | Update active config variables in-memory without loop restart | 2026-10-22 | Phase 1, Phase 2 |
+
+## Blockers
+
+None.
+
+## Concerns
+
+- Ensure shell injection sanitization is foolproof since target strings are passed directly into `execFile('ping')`.
+
+## Session Context
+
+Milestone v1.2 initialized. Ready to begin Phase 1 planning.

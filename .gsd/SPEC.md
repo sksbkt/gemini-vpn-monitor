@@ -6,46 +6,46 @@
 
 ## Vision
 
-Modernize the Gemini VPN Monitor desktop application by introducing a high-performance Vite + React + TypeScript build pipeline. This allows integrating the existing commercial-grade `PingOscilloscope.tsx` (uPlot HTML5 Canvas engine) into the active application while strictly maintaining the glassmorphic HUD styling, instant startup, low CPU/RAM usage, and real-time telemetry streaming.
+Elevate the Gemini VPN Monitor desktop widget with a persistent, dynamic settings subsystem and glassmorphic configuration interface. Users can seamlessly customize the target host/IP for latency monitoring, tune probing intervals and timeout thresholds, select from popular DNS presets, and persist their preferences across application restarts without downtime or reload.
 
 ## Goals
 
-1. **Toolchain & Pipeline Setup**: Integrate Vite with TypeScript and React into the existing Electron architecture, ensuring fast HMR during development and optimized static bundling for production.
-2. **Component & Telemetry Integration**: Wire the existing `PingOscilloscope.tsx` component into the live application, feeding real-time ICMP ping ticks and timeout drops directly from Electron's IPC bridge into the uPlot rolling canvas buffer.
-3. **Glassmorphic HUD Parity**: Rebuild the UI shell (drag handles, window control buttons, glowing status pill, 2x2 metric cards) as modular React components matching the exact visual style, colors, and animations in `styles.css`.
-4. **Clean Dependency Management**: Formalize all dependencies in `package.json` (React, React-DOM, uPlot, TypeScript, Vite) and clean up extraneous/orphaned artifacts.
+1. **Persistent Configuration Store**: Store user settings (`pingTarget`, `pingIntervalMs`, `pingTimeoutMs`, `isPinned`) locally on disk (`userData/config.json`) with safe defaults (`4.2.2.4`, `1000ms`, `800ms`).
+2. **Dynamic Poller Reconfiguration**: Enable `main.js` to dynamically apply new ping targets and interval parameters on-the-fly without restarting the application loop.
+3. **Glassmorphic Settings Modal**: Provide a sleek, translucent settings modal with smooth fade/slide transitions, input validation (IPv4 / hostname validation), quick preset selector buttons (`4.2.2.4`, `1.1.1.1`, `8.8.8.8`, `9.9.9.9`), and a reset-to-defaults action.
+4. **IPC Protocol**: Implement secure two-way IPC handlers (`settings:get`, `settings:save`) exposed via `preload.js` with complete TypeScript typings.
 
 ## Non-Goals (Out of Scope)
 
-- Rewriting the Electron main process (`main.js`) or preload script (`preload.js`) in TypeScript.
-- Modifying the core ICMP ping probe (`ping 4.2.2.4`) or Gemini geo-restriction verification logic in `main.js`.
-- Adding remote telemetry logging, multi-service dashboards, or cloud databases.
+- Modifying the Gemini API geo-restriction check endpoint or algorithm.
+- Multi-target simultaneous parallel probing (covered in a future multi-AI milestone).
+- Cloud sync of settings across machines.
 
 ## Constraints
 
-- **Window Constraints**: Window remains fixed at 360x345, frameless, transparent, non-resizable.
-- **Hardware Acceleration**: Must run smoothly with hardware acceleration disabled (`app.disableHardwareAcceleration()`).
-- **Zero Layout Shifts**: Canvas and HUD layout must have fixed dimensions with zero jumpiness.
-- **IPC Isolation**: Must strictly operate across `contextBridge` (`window.api`) with `contextIsolation: true`.
+- **Fixed Form Factor**: Modal must fit cleanly inside the 360x345 frameless widget without spilling outside window boundaries or causing scrollbar overflow.
+- **IPC Isolation**: Renderer communicates strictly across `contextBridge` (`window.api.getSettings()`, `window.api.saveSettings()`).
+- **Input Validation**: Must validate that target host contains no malicious shell injection characters (as it is passed to `execFile('ping')`).
+- **Smooth 60 FPS**: Opening/closing settings modal must not interrupt the continuous background 60 FPS oscilloscope conveyor loop.
 
 ## Success Criteria
 
-- [ ] Vite bundles the React app into `dist/` with zero TypeScript or build errors.
-- [ ] Electron launches and loads the bundled React app seamlessly in both development and production.
-- [ ] `PingOscilloscope` renders live latency points smoothly with neon cyan wave and red 0ms timeout cliff drops.
-- [ ] Window controls (Close, Minimize, Always-on-Top Pin) function identically to the current implementation.
-- [ ] Metric cards (Current Ping, 10-Avg, Packet Loss %, Server) and Status Pill update in real-time.
-- [ ] All required packages are cleanly declared in `package.json` without extraneous modules.
+- [ ] Settings modal opens and closes smoothly via a gear icon in `Header.tsx`.
+- [ ] User can change target to `1.1.1.1` or `8.8.8.8` or custom IP and see live latency and `Server:` metric card update immediately.
+- [ ] Ping interval slider (500ms - 3000ms) updates probe cadence in real-time.
+- [ ] Settings persist across full application quit and restart.
+- [ ] Input validation blocks invalid IPs/hostnames and shell escape characters.
+- [ ] Reset to Defaults button restores standard values (`4.2.2.4`, `1000ms`, `800ms`).
 
 ## Technical Requirements
 
 | Requirement | Priority | Notes |
 |-------------|----------|-------|
-| Vite + React + TS Build | Must-have | Standard Vite configuration with relative base paths (`base: './'`) for Electron file loading |
-| uPlot Canvas Integration | Must-have | Seamless ingestion of live ping ticks into `PingOscilloscope.tsx` with 60 FPS conveyor |
-| Visual HUD Parity | Must-have | 1:1 match of existing glassmorphic styling, glow filters, fonts, and dark theme |
-| Window Control Handlers | Must-have | Integration with `window.api.close()`, `minimize()`, `togglePin()` |
-| Package Hygiene | Should-have | Explicit `dependencies` and `devDependencies` in `package.json` |
+| Dynamic Config Store | Must-have | JSON file in `app.getPath('userData')/config.json` with fallback defaults |
+| IPC Channels (`settings:get`, `settings:save`) | Must-have | Two-way IPC handlers with TypeScript typings in `vite-env.d.ts` |
+| Shell Injection Sanitization | Must-have | Regex validation `^[a-zA-Z0-9.-]+$` before passing to `execFile` |
+| Glassmorphic Modal UI | Must-have | Translucent backdrop blur matching `#121826` theme |
+| Quick DNS Preset Buttons | Should-have | One-click selection for `4.2.2.4`, `1.1.1.1`, `8.8.8.8`, `9.9.9.9` |
 
 ---
 
