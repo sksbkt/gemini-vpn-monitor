@@ -181,33 +181,110 @@ function runPing(target = currentSettings.pingTarget, timeoutMs = currentSetting
   });
 }
 
-// Check Gemini Geo-restriction
-function checkGemini() {
-  return new Promise((resolve) => {
-    const req = https.get(
-      'https://generativelanguage.googleapis.com/v1beta/models?key=vpn_check_ping',
-      { timeout: 3500 },
-      (res) => {
-        let body = '';
-        res.on('data', (chunk) => { body += chunk; });
-        res.on('end', () => {
-          if (body.includes('User location is not supported') || body.includes('API usage not available in your region')) {
-            resolve('RESTRICTED');
-          } else if (body.includes('API_KEY_INVALID') || body.includes('API key not valid') || res.statusCode === 200) {
-            resolve('UNRESTRICTED');
-          } else {
-            resolve('RESTRICTED');
-          }
-        });
-      }
-    );
+const RESTRICTED_COUNTRIES = new Set([
+  'IR', // Iran
+  'RU', // Russia
+  'CN', // China
+  'KP', // North Korea
+  'SY', // Syria
+  'CU', // Cuba
+  'BY'  // Belarus
+]);
 
-    req.on('error', () => resolve('OFFLINE'));
-    req.on('timeout', () => { req.destroy(); resolve('OFFLINE'); });
+// Check Gemini Geo-restriction against live Google Gemini service
+function checkGemini(timeoutMs = 5000) {
+  return new Promise((resolve) => {
+    let resolved = false;
+    const safeResolve = (status) => {
+      if (!resolved) {
+        resolved = true;
+        resolve(status);
+      }
+    };
+
+    const req = https.get('https://gemini.google.com/', {
+      timeout: timeoutMs,
+      maxHeaderSize: 65536,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }
+    }, (res) => {
+      if (res.statusCode === 403 || res.statusCode === 451 || (res.statusCode >= 400 && res.statusCode < 500)) {
+        req.destroy();
+        return safeResolve('RESTRICTED');
+      }
+
+      if (res.statusCode !== 200) {
+        req.destroy();
+        return safeResolve('RESTRICTED');
+      }
+
+      let accumulated = '';
+      res.on('data', (chunk) => {
+        accumulated += chunk.toString('utf8');
+
+        // Check for explicit geo-blocking phrases
+        const lower = accumulated.toLowerCase();
+        if (
+          lower.includes("isn't supported in your country") ||
+          lower.includes("not supported in your country") ||
+          lower.includes("isn't currently supported in your country") ||
+          lower.includes("not available in your region") ||
+          lower.includes("not available in your country") ||
+          lower.includes("user location is not supported")
+        ) {
+          req.destroy();
+          return safeResolve('RESTRICTED');
+        }
+
+        // Check for recognized country code in Google's WIZ_global_data
+        const match = accumulated.match(/"vXmutd"\s*:\s*"%\.@\.\\"([A-Z]{2})\\"/) ||
+                      accumulated.match(/\\"([A-Z]{2})\\",\s*\\"ZZ\\"/);
+        if (match) {
+          const country = match[1];
+          req.destroy();
+          if (RESTRICTED_COUNTRIES.has(country)) {
+            return safeResolve('RESTRICTED');
+          } else {
+            return safeResolve('UNRESTRICTED');
+          }
+        }
+
+        // Optimization: abort early if initial 250KB scanned without restriction
+        if (accumulated.length > 250000) {
+          req.destroy();
+          return safeResolve('UNRESTRICTED');
+        }
+      });
+
+      res.on('end', () => {
+        const match = accumulated.match(/"vXmutd"\s*:\s*"%\.@\.\\"([A-Z]{2})\\"/) ||
+                      accumulated.match(/\\"([A-Z]{2})\\",\s*\\"ZZ\\"/);
+        if (match) {
+          const country = match[1];
+          if (RESTRICTED_COUNTRIES.has(country)) {
+            return safeResolve('RESTRICTED');
+          }
+          return safeResolve('UNRESTRICTED');
+        }
+        safeResolve('UNRESTRICTED');
+      });
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      safeResolve('OFFLINE');
+    });
+
+    req.on('error', () => {
+      safeResolve('OFFLINE');
+    });
   });
 }
 
-let currentGeminiStatus = 'UNRESTRICTED';
+let currentGeminiStatus = 'RESTRICTED';
 
 // Background Loop for Periodic Gemini Geo-restriction check (every 6 seconds)
 async function startGeminiCheckLoop() {
@@ -286,11 +363,13 @@ if (require.main === module) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     DEFAULT_SETTINGS,
+    RESTRICTED_COUNTRIES,
     sanitizeTarget,
     loadSettings,
     saveSettings,
     getConfigPath,
     runPing,
+    checkGemini,
     getCurrentSettings: () => currentSettings
   };
 }
