@@ -1,0 +1,25 @@
+{
+  "name": "gemini-vpn-monitor",
+  "version": "1.1.0",
+  "description": "Real-time Google Gemini VPN restriction and latency monitoring widget",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "uplot": "^1.6.32"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^28.3.3",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.6"
+  }
+}
