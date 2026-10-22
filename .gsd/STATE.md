@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-22T19:55:10+03:30
+updated: 2026-10-22T19:58:30+03:30
 ---
 
 # Project State
@@ -8,24 +8,24 @@ updated: 2026-10-22T19:55:10+03:30
 
 **Milestone:** Settings & Custom Target Configuration (v1.2.0)
 **Phase:** 1 - Settings Store & Dynamic Poller IPC
-**Status:** Milestone planned / Ready for Phase 1 planning
-**Plan:** None active (ready for /plan 1)
+**Status:** Planning complete / Ready for execution
+**Plan:** Ready for /execute 1
 
 ## Last Action
 
-Milestone v1.2 created:
-- `.gsd/SPEC.md` finalized with goals, constraints, shell sanitization, and technical requirements.
-- `.gsd/ROADMAP.md` initialized with 3 phases covering persistence, UI modal, and end-to-end verification.
+Created execution plans for Phase 1:
+- `1.1-PLAN.md`: Persistent Settings Store and Sanitized IPC Handlers (Wave 1)
+- `1.2-PLAN.md`: Dynamic Poller Reconfiguration in Main Process (Wave 2)
 
 ## Next Steps
 
-1. Run `/plan 1` to create execution plans for Phase 1: Settings Store & Dynamic Poller IPC.
+1. `/execute 1` — execute Phase 1 plans.
 
 ## Active Decisions
 
 | Decision | Choice | Made | Affects |
 |----------|--------|------|---------|
-| Storage Strategy | JSON config in `app.getPath('userData')/config.json` | 2026-10-22 | Phase 1 |
+| Storage Strategy | JSON config in `app.getPath('userData')/gemini-vpn-config.json` | 2026-10-22 | Phase 1 |
 | Shell Injection Protection | Strict regex sanitization `^[a-zA-Z0-9.-]+$` before `execFile` | 2026-10-22 | Phase 1 |
 | Poller Reconfiguration | Update active config variables in-memory without loop restart | 2026-10-22 | Phase 1, Phase 2 |
 
@@ -39,4 +39,4 @@ None.
 
 ## Session Context
 
-Milestone v1.2 initialized. Ready to begin Phase 1 planning.
+Phase 1 planned with 2 plans across 2 waves. Ready to execute.
