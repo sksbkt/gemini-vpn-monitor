@@ -1,34 +1,35 @@
 ---
-updated: 2026-10-22T18:57:55+03:30
+updated: 2026-10-22T19:03:00+03:30
 ---
 
 # Project State
 
 ## Current Position
 
-**Milestone:** Codebase Mapping
-**Phase:** 0 - Architecture & Tech Inventory
-**Status:** planning
-**Plan:** None active (ready for /plan)
+**Milestone:** Modernize & Integrate React/uPlot
+**Phase:** 1 - Toolchain & Vite Build Setup
+**Status:** Ready for execution
+**Plan:** Plans 1.1 and 1.2 ready
 
 ## Last Action
 
-Codebase mapping complete:
-- 5 core components identified (Main Process, Preload Bridge, Renderer HUD, React Canvas Component, Vendored Libs)
-- 3 dependencies analyzed (`electron@28.3.3`, extraneous `uplot@1.6.32`, vendored `uPlot.iife.min.js`)
-- 7 technical debt items cataloged (unmounted React component, missing build toolchain, hardcoded endpoints, Windows-specific ping args, lack of automated tests, uninitialized git repository)
+Planning complete for Phase 1:
+- `.gsd/SPEC.md` created with status `FINALIZED`.
+- `.gsd/ROADMAP.md` created with 3 distinct phases.
+- `.gsd/phases/1/1.1-PLAN.md` created (Dependencies, TypeScript, Vite config).
+- `.gsd/phases/1/1.2-PLAN.md` created (React entry points, Electron window adapter, build verification).
 
 ## Next Steps
 
-1. Run `/plan` to decompose requirements into executable phases in `ROADMAP.md`
-2. Decide whether to integrate `PingOscilloscope.tsx` via a build step (Vite/TypeScript) or continue with the lightweight vanilla SVG pipeline in `renderer.js`
-3. Initialize git version control (`git init`) and commit baseline
+1. Run `/execute 1` to begin Phase 1 execution (or execute Plan 1.1)
 
 ## Active Decisions
 
 | Decision | Choice | Made | Affects |
 |----------|--------|------|---------|
-| Primary Renderer | Vanilla SVG (`renderer.js`) currently active; React + uPlot component is present in `src/` | 2026-10-22 | Phase planning, build toolchain |
+| Primary Renderer Modernization | Vite + React + TypeScript + uPlot | 2026-10-22 | All phases |
+| Relative Asset Path | `base: './'` in `vite.config.ts` | 2026-10-22 | Phase 1 build output |
+| Main Process Scope | Keep `main.js` and `preload.js` in JavaScript | 2026-10-22 | Phase 1, Phase 2 |
 
 ## Blockers
 
@@ -36,9 +37,8 @@ None.
 
 ## Concerns
 
-- Hardware acceleration is disabled (`app.disableHardwareAcceleration()`) to avoid GPU crashes on Windows transparent windows; canvas performance might differ if switched to uPlot without GPU acceleration.
-- Ping probe relies on Windows `ping -n 1 -w 800` CLI syntax.
+- Hardware acceleration remains disabled (`app.disableHardwareAcceleration()`); ensure Canvas redraws in `PingOscilloscope.tsx` remain fluid at 60 FPS.
 
 ## Session Context
 
-Codebase mapped. `.gsd/ARCHITECTURE.md`, `.gsd/STACK.md`, and `.gsd/STATE.md` generated.
+Planning complete for Phase 1. Plans verified and ready for execution.
