@@ -33,13 +33,13 @@ updated: 2026-10-22T19:02:25+03:30
 ---
 
 ### Phase 2: React HUD Shell & Telemetry State
-**Status:** ⬜ Not Started
+**Status:** ✅ Complete
 **Objective:** Build the top-level React app shell, HUD header with window controls, centered status pill, and 2x2 metrics grid hooked to `window.api.onUpdate`.
 **Depends on:** Phase 1
 
 **Plans:**
-- [ ] Plan 2.1: React shell, window controls, and IPC telemetry subscription
-- [ ] Plan 2.2: Metrics grid and status pill with glassmorphic styling
+- [x] Plan 2.1: React shell, window controls, and IPC telemetry subscription
+- [x] Plan 2.2: Metrics grid and status pill with glassmorphic styling
 
 ---
 
@@ -59,7 +59,7 @@ updated: 2026-10-22T19:02:25+03:30
 | Phase | Status | Plans | Complete |
 |-------|--------|-------|----------|
 | 1 | ✅ | 2/2 | 100% |
-| 2 | ⬜ | 0/2 | 0% |
+| 2 | ✅ | 2/2 | 100% |
 | 3 | ⬜ | 0/2 | 0% |
 
 ---
