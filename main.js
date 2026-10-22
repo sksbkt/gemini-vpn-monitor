@@ -159,10 +159,12 @@ ipcMain.handle('settings:save', (_event, newSettings) => {
   return saveSettings(newSettings);
 });
 
-// Ping 4.2.2.4
-function runPing() {
+// Ping target host/IP
+function runPing(target = currentSettings.pingTarget, timeoutMs = currentSettings.pingTimeoutMs) {
   return new Promise((resolve) => {
-    execFile('ping', [PING_TARGET, '-n', '1', '-w', '800'], { windowsHide: true }, (err, stdout) => {
+    const validTarget = sanitizeTarget(target) || DEFAULT_SETTINGS.pingTarget;
+    const safeTimeout = Math.max(300, Math.min(3000, Number(timeoutMs) || 800));
+    execFile('ping', [validTarget, '-n', '1', '-w', String(safeTimeout)], { windowsHide: true }, (err, stdout) => {
       if (err || !stdout) return resolve(null);
       const match = stdout.match(/time[=<](\d+)ms/i);
       if (match) return resolve(parseInt(match[1], 10));
@@ -214,7 +216,7 @@ async function startGeminiCheckLoop() {
   }
 }
 
-// Dedicated 1-Second Ping Loop (Exact cadence like "ping 4.2.2.4 -t")
+// Dedicated Dynamic Ping Loop (Exact cadence tuned by user settings)
 async function startMonitoring() {
   // Initial check
   try {
@@ -229,7 +231,7 @@ async function startMonitoring() {
 
     if (mainWindow && !mainWindow.isDestroyed()) {
       cycleCount++;
-      const pingVal = await runPing();
+      const pingVal = await runPing(currentSettings.pingTarget, currentSettings.pingTimeoutMs);
 
       history.push(pingVal);
       if (history.length > MAX_HISTORY) history.shift();
@@ -246,14 +248,15 @@ async function startMonitoring() {
         lossPct,
         history,
         status: currentGeminiStatus,
-        server: PING_TARGET,
+        server: currentSettings.pingTarget,
         timestamp: Date.now()
       });
     }
 
-    // Windows "ping -t" waits exactly (1000ms - pingTime) before next echo request
+    // Windows "ping -t" waits dynamic interval minus elapsed ping time
+    const interval = currentSettings.pingIntervalMs || 1000;
     const elapsed = Date.now() - startTime;
-    const waitTime = Math.max(100, 1000 - elapsed);
+    const waitTime = Math.max(50, interval - elapsed);
     await new Promise((r) => setTimeout(r, waitTime));
   }
 }
