@@ -1,7 +1,7 @@
 ---
 milestone: Settings & Custom Target Configuration
 version: 1.2.0
-updated: 2026-10-22T19:54:55+03:30
+updated: 2026-10-22T20:29:30+03:30
 ---
 
 # Roadmap
@@ -11,11 +11,11 @@ updated: 2026-10-22T19:54:55+03:30
 
 ## Must-Haves (from SPEC)
 
-- [ ] JSON configuration storage in `userData/config.json` with fallback defaults
-- [ ] Two-way IPC channels (`settings:get`, `settings:save`) with shell sanitization
-- [ ] Dynamic poller reconfiguration in `main.js` without restarting the application
-- [ ] Glassmorphic Settings Modal with IP/host input, DNS presets, interval slider, and reset
-- [ ] Clean TypeScript integration across `vite-env.d.ts` and React components
+- [x] JSON configuration storage in `userData/gemini-vpn-config.json` with fallback defaults
+- [x] Two-way IPC channels (`settings:get`, `settings:save`) with shell sanitization
+- [x] Dynamic poller reconfiguration in `main.js` without restarting the application
+- [x] Glassmorphic Settings Modal with IP/host input, DNS presets, interval slider, and reset
+- [x] Clean TypeScript integration across `vite-env.d.ts` and React components
 
 ---
 
@@ -44,13 +44,13 @@ updated: 2026-10-22T19:54:55+03:30
 ---
 
 ### Phase 3: End-to-End Verification & Production Build
-**Status:** ⬜ Not Started
+**Status:** ✅ Complete
 **Objective:** Validate on-the-fly target switching, settings persistence across app restarts, zero-regression build checks, and milestone verification.
 **Depends on:** Phase 2
 
 **Plans:**
-- [ ] Plan 3.1: Verify dynamic target switching and disk persistence
-- [ ] Plan 3.2: Full production build, process launch testing, and milestone audit
+- [x] Plan 3.1: Verify dynamic target switching and disk persistence
+- [x] Plan 3.2: Full production build, process launch testing, and milestone audit
 
 ---
 
@@ -60,7 +60,7 @@ updated: 2026-10-22T19:54:55+03:30
 |-------|--------|-------|----------|
 | 1 | ✅ Complete | 2/2 | 100% |
 | 2 | ✅ Complete | 2/2 | 100% |
-| 3 | ⬜ Not Started | 0/2 | 0% |
+| 3 | ✅ Complete | 2/2 | 100% |
 
 ---
 
@@ -70,4 +70,4 @@ updated: 2026-10-22T19:54:55+03:30
 |-------|---------|-----------|----------|
 | 1 | 2026-10-22 | 2026-10-22 | <1d |
 | 2 | 2026-10-22 | 2026-10-22 | <1d |
-| 3 | — | — | — |
+| 3 | 2026-10-22 | 2026-10-22 | <1d |
