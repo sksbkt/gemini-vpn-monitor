@@ -11,11 +11,11 @@ updated: 2026-10-22T19:02:25+03:30
 
 ## Must-Haves (from SPEC)
 
-- [ ] Vite + React + TypeScript build pipeline configured with relative paths for Electron
-- [ ] Explicit package dependencies installed and registered in `package.json`
-- [ ] Rebuilt glassmorphic HUD in React preserving controls, status pill, and metrics grid
-- [ ] Active integration of `PingOscilloscope.tsx` canvas engine driven by IPC telemetry
-- [ ] Verified smooth 60 FPS rendering and functional window management
+- [x] Vite + React + TypeScript build pipeline configured with relative paths for Electron
+- [x] Explicit package dependencies installed and registered in `package.json`
+- [x] Rebuilt glassmorphic HUD in React preserving controls, status pill, and metrics grid
+- [x] Active integration of `PingOscilloscope.tsx` canvas engine driven by IPC telemetry
+- [x] Verified smooth 60 FPS rendering and functional window management
 
 ---
 
@@ -44,13 +44,13 @@ updated: 2026-10-22T19:02:25+03:30
 ---
 
 ### Phase 3: PingOscilloscope Canvas Integration & Polish
-**Status:** ⬜ Not Started
+**Status:** ✅ Complete
 **Objective:** Mount `PingOscilloscope.tsx`, connect live ping ticks and timeout drops into uPlot buffer, verify 60 FPS rendering, tooltips, and remove legacy unneeded files.
 **Depends on:** Phase 2
 
 **Plans:**
-- [ ] Plan 3.1: Mount `PingOscilloscope.tsx` with live telemetry stream
-- [ ] Plan 3.2: Visual verification, cleanup of legacy scripts, and final verification
+- [x] Plan 3.1: Mount `PingOscilloscope.tsx` with live telemetry stream
+- [x] Plan 3.2: Visual verification, cleanup of legacy scripts, and final verification
 
 ---
 
@@ -60,7 +60,7 @@ updated: 2026-10-22T19:02:25+03:30
 |-------|--------|-------|----------|
 | 1 | ✅ | 2/2 | 100% |
 | 2 | ✅ | 2/2 | 100% |
-| 3 | ⬜ | 0/2 | 0% |
+| 3 | ✅ | 2/2 | 100% |
 
 ---
 
