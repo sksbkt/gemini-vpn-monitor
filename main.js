@@ -61,9 +61,13 @@ function createWindow() {
     height: 345,
     show: false,
     frame: false,
+    thickFrame: false,
     transparent: true,
     hasShadow: false,
     backgroundColor: '#00000000',
+    titleBarStyle: 'hidden',
+    autoHideMenuBar: true,
+    title: '',
     resizable: false,
     maximizable: false,
     webPreferences: {
@@ -72,6 +76,8 @@ function createWindow() {
       nodeIntegration: false
     }
   });
+
+  mainWindow.removeMenu();
 
   const devUrl = process.env.VITE_DEV_SERVER_URL;
   if (devUrl) {
