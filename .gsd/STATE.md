@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-22T19:24:10+03:30
+updated: 2026-10-22T19:30:20+03:30
 ---
 
 # Project State
@@ -7,22 +7,31 @@ updated: 2026-10-22T19:24:10+03:30
 ## Current Position
 
 **Milestone:** Modernize & Integrate React/uPlot
-**Phase:** 2 - React HUD Shell & Oscilloscope Integration
-**Status:** In Progress / Fixed
-**Plan:** Timeout drop fixed and verified
+**Phase:** 2 - React HUD Shell & Telemetry State
+**Status:** Ready for execution
+**Plan:** Plans 2.1 and 2.2 ready
 
-## Last Session Summary
+## Last Action
 
-Debugged and resolved timeout graph drop:
-- Root cause identified: `PingOscilloscope.tsx` held the latency line flat at the prior ping height and immediately retraced at the same X coordinate, failing to drop to zero over the interval. Additionally, 0ms had no bottom margin.
-- Fixed:
-  1. Implemented direct vector plunge down to `baselineY` at the exact timeout timestamp.
-  2. Established an 18px bottom floor margin with an explicit 0ms baseline gridline.
-  3. Added neon red (`#ff3366`) stroke, red gradient under-fill, and glowing beacon dots at timeout locations.
-- Verified: `npm run build` compiled in 783ms; tested Electron process running cleanly.
-- Documented in [`.gsd/DEBUG.md`](file:///e:/Electron/gemini-vpn-monitor/.gsd/DEBUG.md) and committed (`f4c632f`).
+Planning complete for Phase 2:
+- `.gsd/phases/2/2.1-PLAN.md` created (Modular HUD components & IPC unsubscribe lifecycle).
+- `.gsd/phases/2/2.2-PLAN.md` created (Production build verification & Electron regression check).
 
 ## Next Steps
 
-1. Launch application via `npm start` or `start.bat` to verify live behavior.
-2. Proceed with roadmap / remaining tasks.
+1. Run `/execute 2` to execute Phase 2 plans.
+
+## Active Decisions
+
+| Decision | Choice | Made | Affects |
+|----------|--------|------|---------|
+| Component Architecture | Modular subcomponents (`Header`, `StatusPill`, `MetricsGrid`) | 2026-10-22 | Phase 2 |
+| IPC Lifecycle | Return unsubscribe callback from `onUpdate` | 2026-10-22 | Phase 2, preload.js |
+
+## Blockers
+
+None.
+
+## Concerns
+
+None. Ready for execution.
