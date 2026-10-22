@@ -33,13 +33,13 @@ updated: 2026-10-22T19:54:55+03:30
 ---
 
 ### Phase 2: Glassmorphic Settings Modal UI & Presets
-**Status:** ⬜ Not Started
+**Status:** ✅ Complete
 **Objective:** Add a settings gear button in `Header.tsx` and create `SettingsModal.tsx` with DNS quick-presets, interval slider, validation, and glassmorphic styling.
 **Depends on:** Phase 1
 
 **Plans:**
-- [ ] Plan 2.1: Settings modal component with quick presets, interval slider, and form validation
-- [ ] Plan 2.2: Modal styling, transitions, and integration with `Header.tsx` and `App.tsx`
+- [x] Plan 2.1: Settings modal component with quick presets, interval slider, and form validation
+- [x] Plan 2.2: Modal styling, transitions, and integration with `Header.tsx` and `App.tsx`
 
 ---
 
@@ -59,7 +59,7 @@ updated: 2026-10-22T19:54:55+03:30
 | Phase | Status | Plans | Complete |
 |-------|--------|-------|----------|
 | 1 | ✅ Complete | 2/2 | 100% |
-| 2 | ⬜ Not Started | 0/2 | 0% |
+| 2 | ✅ Complete | 2/2 | 100% |
 | 3 | ⬜ Not Started | 0/2 | 0% |
 
 ---
@@ -69,5 +69,5 @@ updated: 2026-10-22T19:54:55+03:30
 | Phase | Started | Completed | Duration |
 |-------|---------|-----------|----------|
 | 1 | 2026-10-22 | 2026-10-22 | <1d |
-| 2 | — | — | — |
+| 2 | 2026-10-22 | 2026-10-22 | <1d |
 | 3 | — | — | — |
