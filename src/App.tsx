@@ -3,10 +3,12 @@ import Header from './components/Header';
 import StatusPill from './components/StatusPill';
 import PingOscilloscope, { PingRecord } from './components/PingOscilloscope';
 import MetricsGrid from './components/MetricsGrid';
+import SettingsModal from './components/SettingsModal';
 import { StatusUpdateData } from './vite-env';
 
 export const App: React.FC = () => {
   const [isPinned, setIsPinned] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [status, setStatus] = useState<'UNRESTRICTED' | 'RESTRICTED' | 'OFFLINE'>('UNRESTRICTED');
   const [ping, setPing] = useState<number | null>(null);
   const [avgPing, setAvgPing] = useState<number | null>(null);
@@ -62,6 +64,7 @@ export const App: React.FC = () => {
       <Header
         isPinned={isPinned}
         onTogglePin={handleTogglePin}
+        onOpenSettings={() => setIsSettingsOpen(true)}
         onMinimize={handleMinimize}
         onClose={handleClose}
       />
@@ -86,6 +89,14 @@ export const App: React.FC = () => {
         avgPing={avgPing}
         lossPct={lossPct}
         server={server}
+      />
+
+      {/* Glassmorphic Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        currentTarget={server}
+        onSaveSuccess={(newTarget) => setServer(newTarget)}
       />
     </div>
   );
