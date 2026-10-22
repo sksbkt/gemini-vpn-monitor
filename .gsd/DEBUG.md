@@ -1,47 +1,29 @@
-# Debug Session: TIMEOUT-GRAPH-DROP-002
+# Debug Session: Dark Square Background Behind App
 
 ## Symptom
-The timeouts on the graph did not drop the graph line to zero at the timeout location. The line remained high with broken step artifacts.
+A dark square-like background appeared behind the rounded glassmorphic widget card (filling the 360x345 window bounds around the card and rounded corners).
 
-**When:** When a packet timeout occurred (e.g. `ping = null` / dropped packet).
-**Expected:** The latency graph line must plunge directly down to 0ms at the exact timestamp of the timeout, highlighted in neon red (#ff3366), hitting the visible 0ms baseline.
-**Actual:** The line remained high at the prior latency level until the point X, then produced a zero-width vertical hair stroke, failing to show the drop over the timeout interval.
-
-## Evidence
-- `PingOscilloscope.tsx` was using an erroneous step function:
-  ```ts
-  if (p2.isTimeout && !p1.isTimeout) {
-    ctx.lineTo(p2.x, p1.y); // Held high at prior ping!
-    ctx.lineTo(p2.x, p2.y);
-  } else if (p1.isTimeout && !p2.isTimeout) {
-    ctx.lineTo(p1.x, p2.y); // Jumped immediately back up at same X!
-    ctx.lineTo(p2.x, p2.y);
-  }
-  ```
-- The 0ms line had no bottom floor margin, causing bottom strokes to clip against the viewport edge.
-- Missing explicit 0ms baseline gridline.
-
-## Hypotheses
-
-| # | Hypothesis | Likelihood | Status |
-|---|------------|------------|--------|
-| 1 | Erroneous right-angle step logic and lack of baseline margin prevented the line from plunging to 0ms | 100% | CONFIRMED |
-
-## Attempts
-
-### Attempt 1
-**Testing:** H1 — Rewrite line segment connections and establish an explicit 0ms baseline.
-**Action:**
-1. Replaced step function with direct segment connection (`ctx.lineTo(p2.x, p2.y)`), ensuring the line drops directly to `baselineY` (0ms) at the exact timeout timestamp in glowing red `#ff3366`.
-2. Established an 18px bottom floor margin with a distinct 0ms baseline gridline.
-3. Added glowing red beacon marker dots at each timeout point along the baseline.
-4. Added red gradient fill under the timeout plunge.
-5. Rebuilt production bundle with `npm run build`.
-**Result:** Verified clean 60 FPS build in 783ms; timeouts now plunge directly to the 0ms baseline with glowing neon red markers.
-**Conclusion:** CONFIRMED & RESOLVED.
+**When:** App was launched on Windows.
+**Expected:** The region outside the rounded `.widget-card` (the 10px padding and corners) must be completely transparent to the desktop, showing only the floating HUD.
+**Actual:** A dark rectangular / square background was visible behind the app.
 
 ## Resolution
 
-**Root Cause:** `PingOscilloscope.tsx` held the previous high latency value across the timeout interval due to flawed step logic and had no visible 0ms baseline margin.
-**Fix:** Implemented direct continuous vector interpolation to `baselineY` on timeout points, added a visible 0ms baseline gridline, neon red stroke highlighting, and timeout beacon dots.
-**Verified:** `npm run build` succeeded; Electron process tested running cleanly.
+**Root Cause:**
+1. `app.disableHardwareAcceleration()` was invoked at the top of `main.js`. On Windows, Chromium requires GPU hardware acceleration to composite per-pixel alpha transparency via DirectComposition; falling back to software CPU rendering causes Windows DWM to paint a solid black or dark box over transparent areas.
+2. `hasShadow: true` on Windows transparent frameless windows causes Windows DWM to paint a native rectangular drop shadow along the 360x345 bounding box.
+3. `BrowserWindow` was missing `backgroundColor: '#00000000'`, preventing explicit clearing of the background buffer to 0 alpha.
+4. `html` and `#root` elements did not explicitly enforce `background: transparent !important`.
+
+**Fix:**
+1. Removed `app.disableHardwareAcceleration()` from `main.js`.
+2. Changed `hasShadow: true` to `hasShadow: false` and added `backgroundColor: '#00000000'` in `main.js`.
+3. Added explicit transparency and sizing rules for `html`, `body`, and `#root` in `styles.css`.
+4. Rebuilt the production bundle (`npm run build`).
+
+**Verified:**
+- `npm run build` succeeded with zero errors.
+- All unit and integration test suites passed (`test-settings-poller.js`, `test-e2e-persistence.js`, `test-ipc-contract.js`).
+- Electron process launch smoke test passed.
+
+**Status:** FIXED

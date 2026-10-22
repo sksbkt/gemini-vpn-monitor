@@ -4,9 +4,6 @@ const path = require('path');
 const https = require('https');
 const { execFile } = require('child_process');
 
-// Disable hardware acceleration to prevent transparent window GPU crash on Windows
-app.disableHardwareAcceleration();
-
 const DEFAULT_SETTINGS = {
   pingTarget: '4.2.2.4',
   pingIntervalMs: 1000,
@@ -65,7 +62,8 @@ function createWindow() {
     show: false,
     frame: false,
     transparent: true,
-    hasShadow: true,
+    hasShadow: false,
+    backgroundColor: '#00000000',
     resizable: false,
     maximizable: false,
     webPreferences: {
