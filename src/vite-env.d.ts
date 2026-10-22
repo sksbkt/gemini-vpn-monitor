@@ -14,7 +14,7 @@ export interface ElectronAPI {
   close: () => void;
   minimize: () => void;
   togglePin: () => Promise<boolean>;
-  onUpdate: (callback: (data: StatusUpdateData) => void) => void;
+  onUpdate: (callback: (data: StatusUpdateData) => void) => (() => void) | void;
 }
 
 declare global {
