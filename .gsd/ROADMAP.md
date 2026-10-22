@@ -22,13 +22,13 @@ updated: 2026-10-22T19:54:55+03:30
 ## Phases
 
 ### Phase 1: Settings Store & Dynamic Poller IPC
-**Status:** ⬜ Not Started
+**Status:** ✅ Complete
 **Objective:** Implement persistent config file management in `main.js`, shell sanitization, two-way IPC handlers (`settings:get`, `settings:save`), and dynamic runtime reconfiguration of the ping poller loop.
 **Requirements:** `userData/config.json`, sanitized target IP input, dynamic interval/timeout tuning.
 
 **Plans:**
-- [ ] Plan 1.1: Persistent configuration manager and sanitized IPC handlers
-- [ ] Plan 1.2: Dynamic runtime reconfiguration of main ping monitoring loop
+- [x] Plan 1.1: Persistent configuration manager and sanitized IPC handlers
+- [x] Plan 1.2: Dynamic runtime reconfiguration of main ping monitoring loop
 
 ---
 
@@ -58,7 +58,7 @@ updated: 2026-10-22T19:54:55+03:30
 
 | Phase | Status | Plans | Complete |
 |-------|--------|-------|----------|
-| 1 | ⬜ Not Started | 0/2 | 0% |
+| 1 | ✅ Complete | 2/2 | 100% |
 | 2 | ⬜ Not Started | 0/2 | 0% |
 | 3 | ⬜ Not Started | 0/2 | 0% |
 
@@ -68,6 +68,6 @@ updated: 2026-10-22T19:54:55+03:30
 
 | Phase | Started | Completed | Duration |
 |-------|---------|-----------|----------|
-| 1 | 2026-10-22 | — | — |
+| 1 | 2026-10-22 | 2026-10-22 | <1d |
 | 2 | — | — | — |
 | 3 | — | — | — |
