@@ -283,6 +283,7 @@ if (typeof module !== 'undefined' && module.exports) {
     loadSettings,
     saveSettings,
     getConfigPath,
+    runPing,
     getCurrentSettings: () => currentSettings
   };
 }
