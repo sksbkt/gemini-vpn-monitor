@@ -16,7 +16,7 @@ export interface PingOscilloscopeProps {
   windowSec?: number;
   /** Playback delay buffer in seconds to prevent empty trailing edge (default: 2.0) */
   playbackDelaySec?: number;
-  /** Target width in pixels (default: 316) */
+  /** Target width in pixels (default: 300) */
   width?: number;
   /** Target height in pixels (default: 96) */
   height?: number;
@@ -40,7 +40,7 @@ export const PingOscilloscope: React.FC<PingOscilloscopeProps> = ({
   latestPing,
   windowSec = 14,
   playbackDelaySec = 2.0,
-  width = 316,
+  width = 300,
   height = 96,
   className = '',
 }) => {
@@ -307,16 +307,18 @@ export const PingOscilloscope: React.FC<PingOscilloscopeProps> = ({
             `;
             tip.style.display = 'block';
 
-            const normLeft = Math.max(46, Math.min(w - 46, hover.x));
+            const normLeft = Math.max(52, Math.min(width - 52, hover.x));
             tip.style.left = `${normLeft}px`;
 
             const normY = hy / dpr;
-            if (normY < 32) {
-              tip.style.top = `${normY + 18}px`;
+            if (normY < 44) {
+              // High latency points (upper half of graph): display tooltip below the cursor point
+              tip.style.top = `${normY + 14}px`;
               tip.style.transform = 'translate(-50%, 0)';
             } else {
-              tip.style.top = `${normY}px`;
-              tip.style.transform = 'translate(-50%, -125%)';
+              // Lower latency points (lower half of graph): display tooltip above the cursor point
+              tip.style.top = `${normY - 12}px`;
+              tip.style.transform = 'translate(-50%, -100%)';
             }
           } else if (tipRef.current) {
             tipRef.current.style.display = 'none';
@@ -364,12 +366,13 @@ export const PingOscilloscope: React.FC<PingOscilloscopeProps> = ({
         width: `${width}px`,
         height: `${height}px`,
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
         borderRadius: '12px',
         background: 'rgba(10, 15, 26, 0.45)',
         border: '1px solid rgba(255, 255, 255, 0.06)',
-        marginBottom: '12px',
+        margin: '0 auto 12px auto',
         cursor: 'crosshair',
+        zIndex: 10,
       }}
       className={`wave-container ping-oscilloscope-widget ${className}`}
     >
@@ -379,6 +382,7 @@ export const PingOscilloscope: React.FC<PingOscilloscopeProps> = ({
           width: `${width}px`,
           height: `${height}px`,
           display: 'block',
+          borderRadius: '12px',
         }}
       />
       <div

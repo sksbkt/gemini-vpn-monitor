@@ -175,17 +175,19 @@ body {
 /* Wave Chart Container & Vector Oscilloscope */
 .wave-container {
   width: 100%;
+  max-width: 300px;
   height: 96px;
-  margin-bottom: 12px;
+  margin: 0 auto 12px auto;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 12px;
   background: rgba(10, 15, 26, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.06);
   cursor: crosshair;
+  z-index: 10;
 }
 
 .wave-svg {

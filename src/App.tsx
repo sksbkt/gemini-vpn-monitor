@@ -75,7 +75,7 @@ export const App: React.FC = () => {
       {/* 60 FPS Oscilloscope Canvas Stream */}
       <PingOscilloscope
         latestPing={latestPing}
-        width={316}
+        width={300}
         height={96}
         windowSec={14}
         playbackDelaySec={2.0}
