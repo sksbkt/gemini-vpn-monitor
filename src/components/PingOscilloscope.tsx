@@ -365,8 +365,10 @@ export const PingOscilloscope: React.FC<PingOscilloscopeProps> = ({
         borderRadius: '12px',
         background: 'rgba(10, 15, 26, 0.45)',
         border: '1px solid rgba(255, 255, 255, 0.06)',
+        marginBottom: '12px',
+        cursor: 'crosshair',
       }}
-      className={`ping-oscilloscope-widget ${className}`}
+      className={`wave-container ping-oscilloscope-widget ${className}`}
     >
       <div ref={chartRef} style={{ width: '100%', height: '100%', position: 'relative' }} />
       <div
