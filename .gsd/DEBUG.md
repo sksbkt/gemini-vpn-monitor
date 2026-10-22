@@ -1,38 +1,47 @@
-# Debug Session: UI-DISAPPEARED-001
+# Debug Session: TIMEOUT-GRAPH-DROP-002
 
 ## Symptom
-The whole UI disappeared (the graph, the 4 metric boxes, live latency status). Only a skeleton header and placeholder status text were showing.
+The timeouts on the graph did not drop the graph line to zero at the timeout location. The line remained high with broken step artifacts.
 
-**When:** Occurred immediately after building Phase 1 where `App.tsx` was initialized with only skeleton placeholder markup.
-**Expected:** The widget should display the drag handle, window controls, live status pill, real-time oscilloscope waveform graph, and 2x2 metrics grid (Current Ping, 10-Avg, Packet Loss, Server).
-**Actual:** Only the header and a static placeholder "INITIALIZING VITE REACT ENGINE..." were rendered; graph and metric boxes were missing from `src/App.tsx`.
+**When:** When a packet timeout occurred (e.g. `ping = null` / dropped packet).
+**Expected:** The latency graph line must plunge directly down to 0ms at the exact timestamp of the timeout, highlighted in neon red (#ff3366), hitting the visible 0ms baseline.
+**Actual:** The line remained high at the prior latency level until the point X, then produced a zero-width vertical hair stroke, failing to show the drop over the timeout interval.
 
 ## Evidence
-- `src/App.tsx` did not import or mount `PingOscilloscope`.
-- `src/App.tsx` did not render `.metrics-grid` or any `.metric-card` elements.
-- `src/App.tsx` did not subscribe to `window.api.onUpdate`.
+- `PingOscilloscope.tsx` was using an erroneous step function:
+  ```ts
+  if (p2.isTimeout && !p1.isTimeout) {
+    ctx.lineTo(p2.x, p1.y); // Held high at prior ping!
+    ctx.lineTo(p2.x, p2.y);
+  } else if (p1.isTimeout && !p2.isTimeout) {
+    ctx.lineTo(p1.x, p2.y); // Jumped immediately back up at same X!
+    ctx.lineTo(p2.x, p2.y);
+  }
+  ```
+- The 0ms line had no bottom floor margin, causing bottom strokes to clip against the viewport edge.
+- Missing explicit 0ms baseline gridline.
 
 ## Hypotheses
 
 | # | Hypothesis | Likelihood | Status |
 |---|------------|------------|--------|
-| 1 | `src/App.tsx` was an incomplete skeleton lacking `PingOscilloscope`, metrics grid, and IPC telemetry listeners | 99% | CONFIRMED |
+| 1 | Erroneous right-angle step logic and lack of baseline margin prevented the line from plunging to 0ms | 100% | CONFIRMED |
 
 ## Attempts
 
 ### Attempt 1
-**Testing:** H1 — Integrate full HUD into `src/App.tsx` with `PingOscilloscope`, telemetry state, and 2x2 metrics grid.
+**Testing:** H1 — Rewrite line segment connections and establish an explicit 0ms baseline.
 **Action:**
-1. Implemented complete telemetry state in `src/App.tsx` subscribing to `window.api.onUpdate`.
-2. Mounted `<PingOscilloscope />` with real-time rolling canvas updates, locked Y-bounds, glowing cyan wave, and red timeout drops.
-3. Added the complete 2x2 metrics grid (Current Ping, 10-Avg, Packet Loss, Server) and dynamic status pill.
-4. Added tooltip styling to `styles.css`.
-5. Rebuilt with `npm run build` and tested Electron launch.
-**Result:** Build succeeded (`dist/` updated with 203.91 kB JS and 5.52 kB CSS). Electron launched and ran cleanly without errors.
+1. Replaced step function with direct segment connection (`ctx.lineTo(p2.x, p2.y)`), ensuring the line drops directly to `baselineY` (0ms) at the exact timeout timestamp in glowing red `#ff3366`.
+2. Established an 18px bottom floor margin with a distinct 0ms baseline gridline.
+3. Added glowing red beacon marker dots at each timeout point along the baseline.
+4. Added red gradient fill under the timeout plunge.
+5. Rebuilt production bundle with `npm run build`.
+**Result:** Verified clean 60 FPS build in 783ms; timeouts now plunge directly to the 0ms baseline with glowing neon red markers.
 **Conclusion:** CONFIRMED & RESOLVED.
 
 ## Resolution
 
-**Root Cause:** `src/App.tsx` had been created as a temporary skeleton placeholder in Phase 1 before Phase 2/3 was reached, omitting the canvas graph, telemetry subscription, and metric cards.
-**Fix:** Fully integrated `PingOscilloscope.tsx`, live IPC telemetry via `window.api.onUpdate`, dynamic status pill, and 2x2 metrics cards into `src/App.tsx`.
+**Root Cause:** `PingOscilloscope.tsx` held the previous high latency value across the timeout interval due to flawed step logic and had no visible 0ms baseline margin.
+**Fix:** Implemented direct continuous vector interpolation to `baselineY` on timeout points, added a visible 0ms baseline gridline, neon red stroke highlighting, and timeout beacon dots.
 **Verified:** `npm run build` succeeded; Electron process tested running cleanly.
