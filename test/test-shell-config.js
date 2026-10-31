@@ -125,14 +125,15 @@ try {
     '.window-controls must declare -webkit-app-region: no-drag'
   );
 
-  if (/\.win-btn\s*svg/.test(cssContent)) {
-    assert(
-      /\.win-btn\s*svg[\s\S]*?pointer-events:\s*none/.test(cssContent),
-      '.win-btn svg must declare pointer-events: none'
-    );
-  } else {
-    console.log('ℹ Notice: .win-btn svg pointer-events: none will be asserted once added in Plan 01-02');
-  }
+  assert(
+    /\.win-btn[\s\S]*?-webkit-app-region:\s*no-drag\s*!important/.test(cssContent),
+    '.win-btn must declare -webkit-app-region: no-drag !important'
+  );
+
+  assert(
+    /\.win-btn\s*svg[\s\S]*?pointer-events:\s*none/.test(cssContent),
+    '.win-btn svg must declare pointer-events: none'
+  );
 
   console.log('✓ Test 3: styles.css contains valid draggable and non-draggable region declarations');
 

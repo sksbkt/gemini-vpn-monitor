@@ -99,7 +99,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag !important;
 }
 
 .win-btn {
@@ -110,12 +110,22 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 2px;
+  padding: 4px;
+  -webkit-app-region: no-drag !important;
   transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.win-btn svg {
+  pointer-events: none;
 }
 
 .win-btn:hover {
   color: #ffffff;
+  transform: scale(1.08);
+}
+
+.win-btn:active {
+  transform: scale(0.95);
 }
 
 .win-btn.pinned {
