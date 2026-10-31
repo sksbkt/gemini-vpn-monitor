@@ -17,6 +17,22 @@ export const App: React.FC = () => {
   const [latestPing, setLatestPing] = useState<PingRecord | undefined>(undefined);
 
   useEffect(() => {
+    // Initial fetch of persisted settings for pin state sync per D-07
+    if (window.api?.getSettings) {
+      window.api.getSettings().then((settings) => {
+        if (settings && typeof settings.isPinned === 'boolean') {
+          setIsPinned(settings.isPinned);
+        }
+        if (settings && settings.pingTarget) {
+          setServer(settings.pingTarget);
+        }
+      }).catch((err) => {
+        console.error('Failed to fetch initial settings:', err);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (window.api?.onUpdate) {
       const unsubscribe = window.api.onUpdate((data: StatusUpdateData) => {
         setStatus(data.status);
