@@ -4,7 +4,7 @@
   "description": "Real-time Google Gemini VPN restriction and latency monitoring widget",
   "main": "main.js",
   "scripts": {
-    "test": "node test/test-ipc-contract.js && node test/test-shell-config.js",
+    "test": "node test/test-ipc-contract.js && node test/test-shell-config.js && node test/test-ping-engine.js",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
