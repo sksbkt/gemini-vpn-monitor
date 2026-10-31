@@ -516,11 +516,11 @@ export default Header;
 |---|-------|---------|---------------|
 | A1 | Software rasterization (`app.disableHardwareAcceleration()`) maintains 60 FPS for uPlot canvas and CSS blur on Windows 10/11 without excessive CPU usage (<2%). | Summary & Alternatives Considered | If complex canvas charting causes high CPU, hardware acceleration would need to be selectively re-enabled via driver allow-lists. However, benchmark shows 360x345 window with 60 points consumes negligible CPU. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does `app.disableHardwareAcceleration()` affect CSS `backdrop-filter: blur(32px)` rendering performance on low-end machines?**
    - What we know: In Electron 28, SwiftShader software rendering supports `backdrop-filter: blur()`. In our widget card (`.widget-card`), `background: rgba(18, 24, 38, 0.78)` provides fallback opacity even if blur is subtly softened.
-   - Recommendation: Keep `app.disableHardwareAcceleration()` active as specified in D-03 to prevent black box glitching on Windows DWM.
+   - Recommendation: RESOLVED: Keep `app.disableHardwareAcceleration()` active as specified in D-03 to prevent black box glitching on Windows DWM.
 
 ## Environment Availability
 

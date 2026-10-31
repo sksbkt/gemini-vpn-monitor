@@ -24,7 +24,10 @@ This roadmap defines the active migration to `@opengsd/gsd-core` and the executi
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
 - [ ] 01-01-PLAN.md — Electron BrowserWindow Shell & Hardware Acceleration Anti-Glitch
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-02-PLAN.md — Custom Draggable Header Ergonomics, Isolated No-Drag Controls, and State Sync
 
 ---
@@ -43,4 +46,3 @@ Plans:
 Plans:
 - [ ] 02-01: Remove legacy charting dependencies and construct high-speed 60s FIFO queue buffer within React `useRef` tied to the IPC stream.
 - [ ] 02-02: Configure `uPlot` instance with custom series canvas hooks (`hooks.drawSeries`) for cyber-green gradient styling and crimson red 0ms timeout plunges.
-
