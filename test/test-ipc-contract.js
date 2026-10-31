@@ -48,10 +48,12 @@ const main = require('../main.js');
 try {
   console.log('--- Running IPC Bridge Contract Tests ---');
 
-  // Test 1: Handlers registered
+  // Test 1: Handlers and listeners registered
   assert(ipcHandlers.has('settings:get'), 'settings:get handler must be registered');
   assert(ipcHandlers.has('settings:save'), 'settings:save handler must be registered');
   assert(ipcHandlers.has('window:toggle-pin'), 'window:toggle-pin handler must be registered');
+  assert(ipcListeners.has('window:close'), 'window:close listener must be registered');
+  assert(ipcListeners.has('window:minimize'), 'window:minimize listener must be registered');
   console.log('✓ Test 1: All required IPC channels registered with ipcMain');
 
   // Test 2: Invoke settings:get
