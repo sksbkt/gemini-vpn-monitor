@@ -2,12 +2,13 @@
 
 ## Overview
 
-This roadmap defines the active migration to `@opengsd/gsd-core` and the execution of two core priorities: establishing a frameless, transparent Electron desktop shell with custom drag handlers, followed by integrating a high-performance zero-delay uPlot 60 FPS oscilloscope engine with cyber-green gradient strokes and crimson red 0ms timeout plunges.
+This roadmap defines the active development of the Gemini VPN Monitor using `@opengsd/gsd-core`: establishing a frameless translucent Electron shell with edge-to-edge drag ergonomics, transitioning to a robust Windows-native persistent ICMP ping engine, and deploying a high-performance zero-delay dual-stream uPlot 60 FPS oscilloscope.
 
 ## Phases
 
 - [x] **Phase 1: Window Shell Refactor** - Configure Electron `BrowserWindow` (`frame: false`, `transparent: true`) and build custom draggable React header with isolated `no-drag` controls. (completed 2026-10-31)
-- [ ] **Phase 2: Zero-Delay uPlot Engine** - Implement 60-second `useRef` FIFO buffer, raw zero-delay streaming, and `uPlot` custom canvas hooks for cyber-green waveforms and 0ms crimson timeout drops.
+- [ ] **Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine** - Expand edge-to-edge header drag region (Discord-style) with strict control isolation, and implement persistent Windows-native `ping.exe` child process stream with CP437/UTF-8 decoding.
+- [ ] **Phase 3: Zero-Delay Dual-Stream uPlot Engine** - Implement 60-second `useRef` FIFO buffer, raw zero-delay streaming, and `uPlot` custom canvas hooks for cyber-green waveforms, crimson red 0ms timeout drops, and dual-target telemetry.
 
 ---
 
@@ -32,9 +33,27 @@ Plans:
 
 ---
 
-### Phase 2: Zero-Delay uPlot Engine
-**Goal**: Deliver a 60 FPS Microsoft Task Manager-style network graph with zero React re-render latency and clear timeout drop indicators.
+### Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine
+**Goal**: Provide fluid edge-to-edge Discord-style window dragging across the full header while ensuring rock-solid, accurate ICMP latency telemetry without process-spawning churn or false-positive timeout drops.
 **Depends on**: Phase 1
+**Requirements**: HEADER-01, HEADER-02, PING-01, PING-02, PING-03
+**Success Criteria** (what must be TRUE):
+  1. Full-width top header container allows grabbing and moving the window from any non-control pixel edge-to-edge.
+  2. Control buttons (Close, Minimize, Settings, Pin) explicitly enforce `-webkit-app-region: no-drag !important` and `pointer-events: none` on inner SVGs, eliminating missed clicks or unintended drags.
+  3. Backend ping runner spawns a continuous, persistent `ping.exe` child process stream (`ping -t`) with robust stdout line buffering and CP437/UTF-8 decoding.
+  4. Telemetry eliminates false-positive `0ms` drops caused by chunk fragmentation, matching standard Windows Command Prompt outputs.
+  5. Ping service architecture is modularized to support arbitrary target endpoints and future interface/gateway bindings for Phase 3 dual-stream telemetry.
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01: Full-width top header drag container and strict button/SVG hit-testing isolation.
+- [ ] 02-02: Persistent Windows-native ICMP ping engine with stream decoding and modular target architecture.
+
+---
+
+### Phase 3: Zero-Delay Dual-Stream uPlot Engine
+**Goal**: Deliver a 60 FPS Microsoft Task Manager-style network graph with zero React re-render latency and clear timeout drop indicators.
+**Depends on**: Phase 2
 **Requirements**: GRAPH-01, GRAPH-02, GRAPH-03
 **Success Criteria** (what must be TRUE):
   1. Ping telemetry streams directly into a 60-second FIFO queue stored in a React `useRef`, bypassing component state re-render cycles.
@@ -44,5 +63,5 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Remove legacy charting dependencies and construct high-speed 60s FIFO queue buffer within React `useRef` tied to the IPC stream.
-- [ ] 02-02: Configure `uPlot` instance with custom series canvas hooks (`hooks.drawSeries`) for cyber-green gradient styling and crimson red 0ms timeout plunges.
+- [ ] 03-01: Establish 60s FIFO queue buffer within React `useRef` tied to the IPC stream.
+- [ ] 03-02: Configure `uPlot` instance with custom series canvas hooks (`hooks.drawSeries`) for cyber-green gradient styling and crimson red 0ms timeout plunges.

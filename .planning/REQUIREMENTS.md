@@ -11,7 +11,15 @@
 - [x] **SHELL-02**: Build a custom glassmorphic top header bar in React with `-webkit-app-region: drag` for fluid desktop repositioning.
 - [x] **SHELL-03**: Isolate all clickable header controls (Pin, Settings, Minimize, Close) with explicit `-webkit-app-region: no-drag` and hover states.
 
-### Phase 2: Zero-Delay uPlot Engine
+### Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine
+
+- [ ] **HEADER-01**: Expand draggable region across the entire edge-to-edge width of the top header container bar in `Header.tsx` and `styles.css` (Discord-style dragging).
+- [ ] **HEADER-02**: Enforce strict controls isolation with `-webkit-app-region: no-drag !important` on all interactive buttons and `pointer-events: none` on child SVGs to guarantee click responsiveness.
+- [ ] **PING-01**: Replace per-tick `execFile('ping')` process spawning with a persistent `ping.exe -t` child process stream, featuring line-buffering and CP437/UTF-8 decoding.
+- [ ] **PING-02**: Eliminate stream fragmentation and false-positive `0ms` timeout drops, matching standard Windows CMD ICMP output.
+- [ ] **PING-03**: Structure the ping service wrapper to support arbitrary target endpoints and future interface bindings for upcoming dual-stream monitoring.
+
+### Phase 3: Zero-Delay Dual-Stream uPlot Engine
 
 - [ ] **GRAPH-01**: Establish a 60-second fixed-capacity rolling FIFO telemetry buffer inside a React `useRef` to eliminate React state re-render bottlenecks.
 - [ ] **GRAPH-02**: Integrate `uPlot` canvas engine with raw telemetry streaming (`ping -t` style) bypassing heavy DOM charting overhead.
@@ -24,7 +32,12 @@
 | SHELL-01 | Phase 1 | Complete |
 | SHELL-02 | Phase 1 | Complete |
 | SHELL-03 | Phase 1 | Complete |
-| GRAPH-01 | Phase 2 | Planned |
-| GRAPH-02 | Phase 2 | Planned |
-| GRAPH-03 | Phase 2 | Planned |
+| HEADER-01 | Phase 2 | Planned |
+| HEADER-02 | Phase 2 | Planned |
+| PING-01 | Phase 2 | Planned |
+| PING-02 | Phase 2 | Planned |
+| PING-03 | Phase 2 | Planned |
+| GRAPH-01 | Phase 3 | Planned |
+| GRAPH-02 | Phase 3 | Planned |
+| GRAPH-03 | Phase 3 | Planned |
 
