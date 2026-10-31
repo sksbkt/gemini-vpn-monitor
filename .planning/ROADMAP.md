@@ -43,14 +43,14 @@ Plans:
   3. Backend ping runner spawns a continuous, persistent `ping.exe` child process stream (`ping -t`) with robust stdout line buffering and CP437/UTF-8 decoding.
   4. Telemetry eliminates false-positive `0ms` drops caused by chunk fragmentation, matching standard Windows Command Prompt outputs.
   5. Ping service architecture is modularized to support arbitrary target endpoints and future interface/gateway bindings for Phase 3 dual-stream telemetry.
-**Plans**: 2 plans
+**Plans**: 2/2 plans executed
 
 Plans:
 **Wave 1**
-- [ ] 02-01-PLAN.md — Full-width top header drag container and strict button/SVG hit-testing isolation.
+- [x] 02-01-PLAN.md — Full-width top header drag container and strict button/SVG hit-testing isolation.
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 02-02-PLAN.md — Persistent Windows-native ICMP ping engine with stream decoding and modular target architecture.
+- [x] 02-02-PLAN.md — Persistent Windows-native ICMP ping engine with stream decoding and modular target architecture.
 
 ---
 
