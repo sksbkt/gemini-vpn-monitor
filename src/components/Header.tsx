@@ -16,14 +16,11 @@ export const Header: React.FC<HeaderProps> = ({
   onClose,
 }) => {
   return (
-    <>
-      {/* Upper Drag Handle */}
-      <div className="upper-drag-handle" title="Drag to move widget" />
-
-      {/* Header with Title & Window Controls */}
-      <header className="card-header">
+    <header className="card-header full-drag-header">
+      <div className="header-drag-zone">
         <h1 className="card-title">Gemini VPN Monitor</h1>
-        <div className="window-controls">
+      </div>
+      <div className="window-controls">
           <button
             id="settingsBtn"
             className="win-btn"
@@ -59,7 +56,6 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       </header>
-    </>
   );
 };
 

@@ -121,6 +121,22 @@ try {
     '.card-header must declare -webkit-app-region: drag'
   );
   assert(
+    /\.card-header[\s\S]*?width:\s*100%/.test(cssContent),
+    '.card-header must declare width: 100%'
+  );
+  assert(
+    /\.card-header[\s\S]*?cursor:\s*grab/.test(cssContent),
+    '.card-header must declare cursor: grab'
+  );
+  assert(
+    /\.header-drag-zone[\s\S]*?-webkit-app-region:\s*drag/.test(cssContent),
+    '.header-drag-zone must declare -webkit-app-region: drag'
+  );
+  assert(
+    /\.card-title[\s\S]*?pointer-events:\s*none/.test(cssContent),
+    '.card-title must declare pointer-events: none'
+  );
+  assert(
     /\.window-controls[\s\S]*?-webkit-app-region:\s*no-drag/.test(cssContent),
     '.window-controls must declare -webkit-app-region: no-drag'
   );

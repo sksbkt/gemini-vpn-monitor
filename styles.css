@@ -78,13 +78,28 @@ body {
   width: 52px;
 }
 
-/* Header Row */
+/* Header Row - Discord-style Edge-to-Edge Draggable Bar */
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   -webkit-app-region: drag;
   margin-bottom: 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.card-header:active {
+  cursor: grabbing;
+}
+
+.header-drag-zone {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  -webkit-app-region: drag;
   cursor: grab;
 }
 
@@ -93,6 +108,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.2px;
   color: #ffffff;
+  pointer-events: none; /* Let drag events pass through title text */
 }
 
 .window-controls {
