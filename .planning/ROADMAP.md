@@ -7,7 +7,7 @@ This roadmap defines the active development of the Gemini VPN Monitor using `@op
 ## Phases
 
 - [x] **Phase 1: Window Shell Refactor** - Configure Electron `BrowserWindow` (`frame: false`, `transparent: true`) and build custom draggable React header with isolated `no-drag` controls. (completed 2026-10-31)
-- [ ] **Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine** - Expand edge-to-edge header drag region (Discord-style) with strict control isolation, and implement persistent Windows-native `ping.exe` child process stream with CP437/UTF-8 decoding.
+- [x] **Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine** - Expand edge-to-edge header drag region (Discord-style) with strict control isolation, and implement persistent Windows-native `ping.exe` child process stream with CP437/UTF-8 decoding. (completed 2026-10-31)
 - [ ] **Phase 3: Zero-Delay Dual-Stream uPlot Engine** - Implement 60-second `useRef` FIFO buffer, raw zero-delay streaming, and `uPlot` custom canvas hooks for cyber-green waveforms, crimson red 0ms timeout drops, and dual-target telemetry.
 
 ---
@@ -43,7 +43,7 @@ Plans:
   3. Backend ping runner spawns a continuous, persistent `ping.exe` child process stream (`ping -t`) with robust stdout line buffering and CP437/UTF-8 decoding.
   4. Telemetry eliminates false-positive `0ms` drops caused by chunk fragmentation, matching standard Windows Command Prompt outputs.
   5. Ping service architecture is modularized to support arbitrary target endpoints and future interface/gateway bindings for Phase 3 dual-stream telemetry.
-**Plans**: 2/2 plans executed
+**Plans**: 2/2 plans complete
 
 Plans:
 **Wave 1**

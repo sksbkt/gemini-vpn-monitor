@@ -11,18 +11,18 @@
     {
       "number": "2",
       "name": "Full-Width Draggable Header & Robust Windows-Native Ping Engine",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "3",
       "name": "Zero-Delay Dual-Stream uPlot Engine",
-      "status": "pending"
+      "status": "in_progress"
     }
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 2 of 3 · 33% · executing"
+    "label": "Advance to the next step (plan phase 3)",
+    "reason": "Phase 3 of 3 — needs a plan"
   },
-  "updated_at": "2026-10-31T19:38:02.947Z"
+  "updated_at": "2026-10-31T20:10:48.247Z"
 }

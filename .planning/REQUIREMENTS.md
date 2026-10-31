@@ -13,11 +13,11 @@
 
 ### Phase 2: Full-Width Draggable Header & Robust Windows-Native Ping Engine
 
-- [ ] **HEADER-01**: Expand draggable region across the entire edge-to-edge width of the top header container bar in `Header.tsx` and `styles.css` (Discord-style dragging).
-- [ ] **HEADER-02**: Enforce strict controls isolation with `-webkit-app-region: no-drag !important` on all interactive buttons and `pointer-events: none` on child SVGs to guarantee click responsiveness.
-- [ ] **PING-01**: Replace per-tick `execFile('ping')` process spawning with a persistent `ping.exe -t` child process stream, featuring line-buffering and CP437/UTF-8 decoding.
-- [ ] **PING-02**: Eliminate stream fragmentation and false-positive `0ms` timeout drops, matching standard Windows CMD ICMP output.
-- [ ] **PING-03**: Structure the ping service wrapper to support arbitrary target endpoints and future interface bindings for upcoming dual-stream monitoring.
+- [x] **HEADER-01**: Expand draggable region across the entire edge-to-edge width of the top header container bar in `Header.tsx` and `styles.css` (Discord-style dragging).
+- [x] **HEADER-02**: Enforce strict controls isolation with `-webkit-app-region: no-drag !important` on all interactive buttons and `pointer-events: none` on child SVGs to guarantee click responsiveness.
+- [x] **PING-01**: Replace per-tick `execFile('ping')` process spawning with a persistent `ping.exe -t` child process stream, featuring line-buffering and CP437/UTF-8 decoding.
+- [x] **PING-02**: Eliminate stream fragmentation and false-positive `0ms` timeout drops, matching standard Windows CMD ICMP output.
+- [x] **PING-03**: Structure the ping service wrapper to support arbitrary target endpoints and future interface bindings for upcoming dual-stream monitoring.
 
 ### Phase 3: Zero-Delay Dual-Stream uPlot Engine
 
@@ -32,11 +32,11 @@
 | SHELL-01 | Phase 1 | Complete |
 | SHELL-02 | Phase 1 | Complete |
 | SHELL-03 | Phase 1 | Complete |
-| HEADER-01 | Phase 2 | Planned |
-| HEADER-02 | Phase 2 | Planned |
-| PING-01 | Phase 2 | Planned |
-| PING-02 | Phase 2 | Planned |
-| PING-03 | Phase 2 | Planned |
+| HEADER-01 | Phase 2 | Complete |
+| HEADER-02 | Phase 2 | Complete |
+| PING-01 | Phase 2 | Complete |
+| PING-02 | Phase 2 | Complete |
+| PING-03 | Phase 2 | Complete |
 | GRAPH-01 | Phase 3 | Planned |
 | GRAPH-02 | Phase 3 | Planned |
 | GRAPH-03 | Phase 3 | Planned |
