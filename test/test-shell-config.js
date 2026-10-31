@@ -137,8 +137,8 @@ try {
     '.card-title must declare pointer-events: none'
   );
   assert(
-    /\.window-controls[\s\S]*?-webkit-app-region:\s*no-drag/.test(cssContent),
-    '.window-controls must declare -webkit-app-region: no-drag'
+    /\.window-controls[\s\S]*?-webkit-app-region:\s*no-drag\s*!important/.test(cssContent),
+    '.window-controls must declare -webkit-app-region: no-drag !important'
   );
 
   assert(

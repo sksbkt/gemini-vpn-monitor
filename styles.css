@@ -111,11 +111,13 @@ body {
   pointer-events: none; /* Let drag events pass through title text */
 }
 
+/* Window Controls - Isolated from Drag Region */
 .window-controls {
   display: flex;
   align-items: center;
   gap: 12px;
   -webkit-app-region: no-drag !important;
+  cursor: default;
 }
 
 .win-btn {
