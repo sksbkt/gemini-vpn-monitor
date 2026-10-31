@@ -4,6 +4,11 @@ const path = require('path');
 const https = require('https');
 const { execFile } = require('child_process');
 
+// Disable hardware acceleration on Windows to eliminate DWM transparency black-box artifacts per D-03
+if (process.platform === 'win32' && app && typeof app.disableHardwareAcceleration === 'function') {
+  app.disableHardwareAcceleration();
+}
+
 if (Menu && typeof Menu.setApplicationMenu === 'function') {
   Menu.setApplicationMenu(null);
 }
@@ -81,6 +86,11 @@ function createWindow() {
 
   mainWindow.removeMenu();
   mainWindow.setMenuBarVisibility(false);
+
+  // Sync initial pin state on launch from loaded settings to prevent startup desync per D-07
+  if (isPinned) {
+    mainWindow.setAlwaysOnTop(true);
+  }
 
   const devUrl = process.env.VITE_DEV_SERVER_URL;
   if (devUrl) {
@@ -370,6 +380,7 @@ if (typeof module !== 'undefined' && module.exports) {
     getConfigPath,
     runPing,
     checkGemini,
-    getCurrentSettings: () => currentSettings
+    getCurrentSettings: () => currentSettings,
+    createWindow
   };
 }
