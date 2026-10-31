@@ -25,10 +25,10 @@ This roadmap defines the active migration to `@opengsd/gsd-core` and the executi
 
 Plans:
 **Wave 1**
-- [ ] 01-01-PLAN.md — Electron BrowserWindow Shell & Hardware Acceleration Anti-Glitch
+- [x] 01-01-PLAN.md — Electron BrowserWindow Shell & Hardware Acceleration Anti-Glitch
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 01-02-PLAN.md — Custom Draggable Header Ergonomics, Isolated No-Drag Controls, and State Sync
+- [x] 01-02-PLAN.md — Custom Draggable Header Ergonomics, Isolated No-Drag Controls, and State Sync
 
 ---
 
