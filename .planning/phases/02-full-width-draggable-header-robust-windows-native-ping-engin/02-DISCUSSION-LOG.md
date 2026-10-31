@@ -52,3 +52,4 @@
 ## Deferred Ideas
 
 - **Phase 3:** Zero-Delay Dual-Stream uPlot Engine with 60-second FIFO `useRef` buffer, cyber-green waveforms, and crimson red 0ms timeout plunges.
+

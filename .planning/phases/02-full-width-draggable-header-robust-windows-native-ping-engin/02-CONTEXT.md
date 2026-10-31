@@ -81,3 +81,4 @@ Phase 2 delivers two critical system enhancements:
 
 *Phase: 02-Full-Width Draggable Header & Robust Windows-Native Ping Engine*  
 *Context gathered: 2026-10-31*
+
