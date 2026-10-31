@@ -16,7 +16,7 @@ covered_files:
   - styles.css
   - test/test-ipc-contract.js
   - test/test-shell-config.js
-covered_digest: "v4:sha256:af1fb0e836a39d2d6a13e560811f8df1d86905cc192b905d56d3ad5a84f2d0be"
+covered_digest: "v4:sha256:318d37f101e48a58e5ea8ead6633d7341a3be2611be8f692ce709903843fa596"
 behavior_unverified: 0
 overrides_applied: 0
 human_verification:
