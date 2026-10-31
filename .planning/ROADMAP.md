@@ -46,8 +46,11 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Full-width top header drag container and strict button/SVG hit-testing isolation.
-- [ ] 02-02: Persistent Windows-native ICMP ping engine with stream decoding and modular target architecture.
+**Wave 1**
+- [ ] 02-01-PLAN.md — Full-width top header drag container and strict button/SVG hit-testing isolation.
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 02-02-PLAN.md — Persistent Windows-native ICMP ping engine with stream decoding and modular target architecture.
 
 ---
 
