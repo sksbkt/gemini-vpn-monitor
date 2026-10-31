@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execFile } = require('child_process');
+const { PingEngine } = require('./pingEngine');
 
 // Disable hardware acceleration on Windows to eliminate DWM transparency black-box artifacts per D-03
 if (process.platform === 'win32' && app && typeof app.disableHardwareAcceleration === 'function') {
@@ -58,6 +59,7 @@ function loadSettings() {
 
 let currentSettings = loadSettings();
 let mainWindow;
+let pingEngine = null;
 const MAX_HISTORY = 18;
 
 let history = [];
@@ -142,6 +144,9 @@ function saveSettings(newSettings) {
 
     if (targetChanged) {
       history = [];
+      if (pingEngine) {
+        pingEngine.setTarget(sanitized.pingTarget);
+      }
     }
 
     return { success: true, settings: currentSettings };
@@ -310,24 +315,25 @@ async function startGeminiCheckLoop() {
   }
 }
 
-// Dedicated Dynamic Ping Loop (Exact cadence tuned by user settings)
-async function startMonitoring() {
-  // Initial check
-  try {
-    currentGeminiStatus = await checkGemini();
-  } catch (e) {
+// Dedicated Dynamic Ping Stream Controller (driven by persistent PingEngine)
+function startMonitoring() {
+  // Initial Gemini Geo-restriction check and background loop
+  checkGemini().then((status) => {
+    currentGeminiStatus = status;
+  }).catch(() => {
     currentGeminiStatus = 'OFFLINE';
-  }
+  });
   startGeminiCheckLoop();
 
-  while (true) {
-    const startTime = Date.now();
+  pingEngine = new PingEngine({
+    target: currentSettings.pingTarget,
+    intervalMs: currentSettings.pingIntervalMs
+  });
 
+  pingEngine.on('ping', ({ latency, timestamp }) => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       cycleCount++;
-      const pingVal = await runPing(currentSettings.pingTarget, currentSettings.pingTimeoutMs);
-
-      history.push(pingVal);
+      history.push(latency);
       if (history.length > MAX_HISTORY) history.shift();
 
       const recent10 = history.slice(-10);
@@ -337,22 +343,18 @@ async function startMonitoring() {
       const lossPct = recent10.length > 0 ? Math.round((timeouts * 100) / recent10.length) : 0;
 
       mainWindow.webContents.send('status-update', {
-        ping: pingVal,
+        ping: latency,
         avgPing,
         lossPct,
         history,
         status: currentGeminiStatus,
         server: currentSettings.pingTarget,
-        timestamp: Date.now()
+        timestamp: timestamp || Date.now()
       });
     }
+  });
 
-    // Windows "ping -t" waits dynamic interval minus elapsed ping time
-    const interval = currentSettings.pingIntervalMs || 1000;
-    const elapsed = Date.now() - startTime;
-    const waitTime = Math.max(50, interval - elapsed);
-    await new Promise((r) => setTimeout(r, waitTime));
-  }
+  pingEngine.start();
 }
 
 if (require.main === module) {
@@ -363,6 +365,12 @@ if (require.main === module) {
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+  });
+
+  app.on('before-quit', () => {
+    if (pingEngine) {
+      pingEngine.stop();
+    }
   });
 
   app.on('window-all-closed', () => {
@@ -381,6 +389,8 @@ if (typeof module !== 'undefined' && module.exports) {
     runPing,
     checkGemini,
     getCurrentSettings: () => currentSettings,
-    createWindow
+    getPingEngine: () => pingEngine,
+    createWindow,
+    startMonitoring
   };
 }
