@@ -6,7 +6,7 @@ This roadmap defines the active migration to `@opengsd/gsd-core` and the executi
 
 ## Phases
 
-- [ ] **Phase 1: Window Shell Refactor** - Configure Electron `BrowserWindow` (`frame: false`, `transparent: true`) and build custom draggable React header with isolated `no-drag` controls.
+- [x] **Phase 1: Window Shell Refactor** - Configure Electron `BrowserWindow` (`frame: false`, `transparent: true`) and build custom draggable React header with isolated `no-drag` controls. (completed 2026-10-31)
 - [ ] **Phase 2: Zero-Delay uPlot Engine** - Implement 60-second `useRef` FIFO buffer, raw zero-delay streaming, and `uPlot` custom canvas hooks for cyber-green waveforms and 0ms crimson timeout drops.
 
 ---
@@ -21,7 +21,7 @@ This roadmap defines the active migration to `@opengsd/gsd-core` and the executi
   1. Electron main window initializes with `frame: false` and `transparent: true`, rendering with zero native title bar or OS borders.
   2. Top bar header in React functions as a window drag handle across the entire empty bar region via `-webkit-app-region: drag`.
   3. Interactive buttons (Pin, Settings, Minimize, Close) carry `-webkit-app-region: no-drag`, remain fully clickable, and execute their IPC actions immediately.
-**Plans**: 2 plans
+**Plans**: 2/2 plans complete
 
 Plans:
 **Wave 1**

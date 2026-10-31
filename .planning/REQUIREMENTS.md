@@ -7,9 +7,9 @@
 
 ### Phase 1: Window Shell Refactor
 
-- [ ] **SHELL-01**: Configure Electron `BrowserWindow` in `main.js` with `frame: false` and `transparent: true` to strip native OS chrome, caption bar, and border shadows.
-- [ ] **SHELL-02**: Build a custom glassmorphic top header bar in React with `-webkit-app-region: drag` for fluid desktop repositioning.
-- [ ] **SHELL-03**: Isolate all clickable header controls (Pin, Settings, Minimize, Close) with explicit `-webkit-app-region: no-drag` and hover states.
+- [x] **SHELL-01**: Configure Electron `BrowserWindow` in `main.js` with `frame: false` and `transparent: true` to strip native OS chrome, caption bar, and border shadows.
+- [x] **SHELL-02**: Build a custom glassmorphic top header bar in React with `-webkit-app-region: drag` for fluid desktop repositioning.
+- [x] **SHELL-03**: Isolate all clickable header controls (Pin, Settings, Minimize, Close) with explicit `-webkit-app-region: no-drag` and hover states.
 
 ### Phase 2: Zero-Delay uPlot Engine
 
@@ -21,9 +21,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHELL-01 | Phase 1 | Planned |
-| SHELL-02 | Phase 1 | Planned |
-| SHELL-03 | Phase 1 | Planned |
+| SHELL-01 | Phase 1 | Complete |
+| SHELL-02 | Phase 1 | Complete |
+| SHELL-03 | Phase 1 | Complete |
 | GRAPH-01 | Phase 2 | Planned |
 | GRAPH-02 | Phase 2 | Planned |
 | GRAPH-03 | Phase 2 | Planned |

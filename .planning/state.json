@@ -6,18 +6,18 @@
     {
       "number": "1",
       "name": "Window Shell Refactor",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "2",
       "name": "Zero-Delay uPlot Engine",
-      "status": "pending"
+      "status": "in_progress"
     }
   ],
   "next": {
-    "command": "/gsd-progress",
-    "label": "Show progress",
-    "reason": "Unsure of state — showing progress"
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step (plan phase 2)",
+    "reason": "Phase 2 of 2 — needs a plan"
   },
-  "updated_at": "2026-10-31T17:41:21.316Z"
+  "updated_at": "2026-10-31T18:50:14.421Z"
 }
